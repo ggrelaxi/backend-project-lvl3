@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Новые уроки на Хекслете</title>
+    <description>Практические уроки по программированию</description>
+    <link>https://ru.hexlet.io/</link>
+    <webMaster>info@hexlet.io</webMaster>
+    <item>
+      <title>Точка входа / JS: Настройка окружения</title>
+      <guid isPermaLink="false">1005</guid>
+      <link>https://ru.hexlet.io/courses/js-setup-environment/lessons/entry-point/theory_unit</link>
+      <description>Цель: Научиться выделять точки входа для приложений и библиотек</description>
+      <pubDate>Sun, 29 Oct 2023 17:26:49 +0000</pubDate>
+    </item>
+    <item>
+      <title>Визуализация статистических данных / Python: Визуализация данных</title>
+      <guid isPermaLink="false">4361</guid>
+      <link>https://ru.hexlet.io/courses/python-data-visualization/lessons/stat-distribution/theory_unit</link>
+      <description>Цель: Учимся решать практические задачи с помощью Matplotlib</description>
+      <pubDate>Thu, 26 Oct 2023 11:37:15 +0000</pubDate>
+    </item>
+    <item>
+      <title>Модуль Pyplot / Python: Визуализация данных</title>
+      <guid isPermaLink="false">4196</guid>
+      <link>https://ru.hexlet.io/courses/python-data-visualization/lessons/pyplot-module/theory_unit</link>
+      <description>Цель: Знакомимся с возможностями Pyplot, модуля визуализации библиотеки Matplotlib</description>
+      <pubDate>Thu, 26 Oct 2023 11:32:35 +0000</pubDate>
+    </item>
+    <item>
+      <title>Библиотека Matplotlib / Python: Визуализация данных</title>
+      <guid isPermaLink="false">4122</guid>
+      <link>https://ru.hexlet.io/courses/python-data-visualization/lessons/matplotlib/theory_unit</link>
+      <description>Цель: Разберем возможности библиотеки Matplotlib для визуализации данных</description>
+      <pubDate>Thu, 26 Oct 2023 11:23:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>Создание базовых графиков / Python: Визуализация данных</title>
+      <guid isPermaLink="false">3888</guid>
+      <link>https://ru.hexlet.io/courses/python-data-visualization/lessons/base-plots-and-dashboards/theory_unit</link>
+      <description>Цель: Учимся создавать графики с помощью Python-библиотек на реальном примере</description>
+      <pubDate>Wed, 25 Oct 2023 13:51:52 +0000</pubDate>
+    </item>
+    <item>
+      <title>Решение аналитической задачи с помощью Jupyter Notebook / Python: Anaconda</title>
+      <guid isPermaLink="false">4305</guid>
+      <link>https://ru.hexlet.io/courses/python-anaconda/lessons/jupyter-notebook/theory_unit</link>
+      <description>Цель: Узнать, как использовать блокноты для написания кода</description>
+      <pubDate>Fri, 20 Oct 2023 12:34:41 +0000</pubDate>
+    </item>
+    <item>
+      <title>Обзор доступных сред разработки / Python: Anaconda</title>
+      <guid isPermaLink="false">4304</guid>
+      <link>https://ru.hexlet.io/courses/python-anaconda/lessons/development-environments/theory_unit</link>
+      <description>Цель: Познакомиться с Jupiter Notebook, Spyder, Jupiter lab</description>
+      <pubDate>Fri, 20 Oct 2023 12:34:41 +0000</pubDate>
+    </item>
+    <item>
+      <title>Установка Anaconda / Python: Anaconda</title>
+      <guid isPermaLink="false">4303</guid>
+      <link>https://ru.hexlet.io/courses/python-anaconda/lessons/installing-anaconda/theory_unit</link>
+      <description>Цель: Познакомиться с функционалом Anaconda и установить на свой компьютер</description>
+      <pubDate>Fri, 20 Oct 2023 12:34:41 +0000</pubDate>
+    </item>
+    <item>
+      <title>Язык Python / Python: Anaconda</title>
+      <guid isPermaLink="false">4297</guid>
+      <link>https://ru.hexlet.io/courses/python-anaconda/lessons/python-for-analysts/theory_unit</link>
+      <description>Цель: Познакомиться с языком Python и библиотеками для аналитики</description>
+      <pubDate>Wed, 18 Oct 2023 11:00:51 +0000</pubDate>
+    </item>
+    <item>
+      <title>Фреймворк Anaconda / Python: Anaconda</title>
+      <guid isPermaLink="false">4296</guid>
+      <link>https://ru.hexlet.io/courses/python-anaconda/lessons/anaconda/theory_unit</link>
+      <description>Цель: Познакомиться с фреймворком Anaconda</description>
+      <pubDate>Wed, 18 Oct 2023 11:00:51 +0000</pubDate>
+    </item>
+  </channel>
+</rss>

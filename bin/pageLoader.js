@@ -10,9 +10,8 @@ programm
 	.description("Download the web page in the specified path")
 	.option("-o, --output [dir]", "directory for saving files")
 	.argument("<url>")
-	.action(async (url, { output }) => {
-		console.log(url, output);
-		const response = await pageLoader(url, output);
+	.action(async (url, options) => {
+		const response = await pageLoader(url, options.output);
 	});
 
 programm.parse(process.argv);
