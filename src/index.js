@@ -16,7 +16,7 @@ const sourceAttrs = {
     img: 'src',
 };
 
-export const pageLoader = (pageUrl, outputDir = "") => {
+const pageLoader = (pageUrl, outputDir = "") => {
 	log("url", pageUrl);
 	log("output directory", outputDir);
 
@@ -108,3 +108,5 @@ export const pageLoader = (pageUrl, outputDir = "") => {
 			return fs.writeFile(pathToMainFile, cheerioData.html());
 		})
 };
+
+export default pageLoader;
