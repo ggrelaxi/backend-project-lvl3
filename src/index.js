@@ -33,7 +33,7 @@ const pageLoader = (pageUrl, outputDir = "") => {
 		const assetName = urlToFilename(tag.attr(attrName));
 		const fixAssetUrlToHtml = path.join(assetsDirname, [processName(url.hostname), assetName].join("-"));
 		const pathToAsset = path.join(pathToProjectDir, fixAssetUrlToHtml);
-
+		
 		return axios
 			.get(assetUrl, { responseType: "arraybuffer" })
 			.then(({ data }) => {

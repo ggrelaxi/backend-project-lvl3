@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import os from "os";
 import nock from "nock";
 import pageLoader from "../src/index";
+import { read } from "node:fs";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,11 +15,14 @@ const readFile = async (filepath) => await fs.readFile(getFixturePath(filepath),
 const destinationDirname = "page-loader-";
 const destinationFilesDirname = "ru-hexlet-io-courses_files";
 const expectedResponseFilename = "expectedResponse.html";
+const expectedChildPageResponseFilename = 'expectedResponseChildPage.html'
 const expectedContentFilename = 'ru-hexlet-io-courses.html'
 const expectedContentDataFilename = 'expectedMainHtml.html'
 const baseUrl = "https://ru.hexlet.io";
 const pagePath = "/courses";
+const childPagePath = "/assets/runtime.js";
 const pageUrl = new URL(pagePath, baseUrl);
+const childPageUrl = new URL(childPagePath, baseUrl)
 
 let tempDir;
 let tempFilesDir;
@@ -44,11 +48,16 @@ const assets = [
 		destinationFilename: 'ru-hexlet-io-assets-professions-nodejs.png',
 		url: "/assets/professions/nodejs.png",
 	},
-	// {
-	// 	filename: "expectedJs.js",
-	// 	destinationFilename: 'ru-hexlet-io-assets-runtime.js',
-	// 	url: "/assets/runtime.js",
-	// },
+	{
+		filename: "expectedJs.js",
+		destinationFilename: 'ru-hexlet-io-assets-runtime.js',
+		url: "/assets/runtime.js",
+	},
+	{
+		filename: "expectedResponseChildPage.html",
+		destinationFilename: 'ru-hexlet-io-assets-runtime.js',
+		url: '/assets/runtime.js'
+	}
 ];
 
 nock.disableNetConnect();
@@ -56,12 +65,15 @@ const scope = nock(baseUrl).persist()
 
 beforeAll(async () => {
 	const expectedGetPageResponse = await readFile(expectedResponseFilename, "utf-8");
+	const expectedGetChildPageReponse = await readFile(expectedChildPageResponseFilename, 'utf-8')
 	const assetsResponses = assets.map(async ({ filename, url }) => {
 		const data = await readFile(filename)
 		return { data, url }
 	})
 
 	scope.get(pagePath).reply(200, expectedGetPageResponse);
+	scope.get(childPagePath).reply(200, expectedGetChildPageReponse)
+
 	const assetsData = await Promise.all(assetsResponses)
 
 	assetsData.forEach(({ data, url }) => {
