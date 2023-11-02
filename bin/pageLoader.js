@@ -10,8 +10,15 @@ programm
 	.description("Download the web page in the specified path")
 	.option("-o, --output [dir]", "directory for saving files")
 	.argument("<url>")
-	.action(async (url, options) => {
-		const response = await pageLoader(url, options.output);
+	.action((url, options) => {
+		return pageLoader(url, options.output)
+			.then(() => {
+				console.log(`Page was successfully downloaded, to directory - ${options.output}`)
+			})
+			.catch((e) => {
+				console.error(e.message)
+				process.exit(0)
+			})
 	});
 
 programm.parse(process.argv);

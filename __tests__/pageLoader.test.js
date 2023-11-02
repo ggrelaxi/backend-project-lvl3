@@ -13,39 +13,93 @@ const readFile = async (filepath) => await fs.readFile(getFixturePath(filepath),
 
 const destinationDirname = "page-loader-";
 const destinationFilesDirname = "ru-hexlet-io-courses_files";
-const pngImage = "ru-hexlet-io-assets-professions-nodejs.png";
 const expectedResponseFilename = "expectedResponse.html";
-const expectedContentFilename = "ru-hexlet-io-courses.html";
+const expectedContentFilename = 'ru-hexlet-io-courses.html'
+const expectedContentDataFilename = 'expectedMainHtml.html'
 const baseUrl = "https://ru.hexlet.io";
 const pagePath = "/courses";
 const pageUrl = new URL(pagePath, baseUrl);
 
-let expectedResponse;
-let expectedContent;
 let tempDir;
 let tempFilesDir;
-
-beforeAll(async () => {
-	expectedResponse = await readFile(expectedResponseFilename);
-	expectedContent = await readFile(expectedContentFilename);
-});
 
 beforeEach(async () => {
 	tempDir = await fs.mkdtemp(path.join(os.tmpdir(), destinationDirname));
 	tempFilesDir = await fs.mkdir(path.join(tempDir, destinationFilesDirname), { recursive: true });
 });
 
+const assets = [
+	{
+		filename: "expectedCss.css",
+		destinationFilename: 'ru-hexlet-io-assets-application.css',
+		url: "/assets/application.css",
+	},
+	{
+		filename: "expectedChildPage.html",
+		destinationFilename: 'ru-hexlet-io-courses.html',
+		url: "/courses",
+	},
+	{
+		filename: "expectedPng.png",
+		destinationFilename: 'ru-hexlet-io-assets-professions-nodejs.png',
+		url: "/assets/professions/nodejs.png",
+	},
+	// {
+	// 	filename: "expectedJs.js",
+	// 	destinationFilename: 'ru-hexlet-io-assets-runtime.js',
+	// 	url: "/assets/runtime.js",
+	// },
+];
+
 nock.disableNetConnect();
+const scope = nock(baseUrl).persist()
+
+beforeAll(async () => {
+	const expectedGetPageResponse = await readFile(expectedResponseFilename, "utf-8");
+	const assetsResponses = assets.map(async ({ filename, url }) => {
+		const data = await readFile(filename)
+		return { data, url }
+	})
+
+	scope.get(pagePath).reply(200, expectedGetPageResponse);
+	const assetsData = await Promise.all(assetsResponses)
+
+	assetsData.forEach(({ data, url }) => {
+		scope.get(url).reply(200, data);
+	})
+})
 
 test("check success download page", async () => {
-	const img = await fs.readFile(path.join(process.cwd(), "/__fixtures__/ru-hexlet-io-assets-professions-nodejs.png"));
-	const scope = nock(baseUrl).persist().get(pagePath).reply(200, expectedResponse);
-	const png = nock(baseUrl).persist().get("/assets/professions/nodejs.png").reply(200, img);
+	await pageLoader(pageUrl, tempDir)
 
-	await pageLoader(pageUrl.toString(), tempDir);
-	const downloadedContent = await fs.readFile(path.join(tempDir, expectedContentFilename), "utf-8");
+	assets.forEach(async ({ destinationFilename }) => {
+		await expect(fs.access(path.join(tempFilesDir, destinationFilename))).resolves.not.toThrow();
+	})
 
-	await expect(fs.access(path.join(tempDir, destinationFilesDirname, pngImage))).resolves.not.toThrow();
-
-	expect(downloadedContent).toEqual(expectedContent);
+	const expectedContent = await readFile(expectedContentDataFilename);
+	const downloadedContent = await fs.readFile(path.join(tempDir, expectedContentFilename), 'utf-8')
+	expect(expectedContent).toEqual(downloadedContent);	
 });
+
+test('no response from download page', async () => {
+	await expect(fs.access(path.join(tempDir, expectedContentFilename))).rejects.toThrow()
+	
+	const invalidUrl = 'http://invalid.abv';
+	nock(invalidUrl).persist().get('/').replyWithError('');
+
+	await expect(pageLoader(invalidUrl, tempDir)).rejects.toThrow()
+}, 100000)
+
+test('invalid site inner url', async () => {
+	const invalidPage = '/badpage';
+	const invalidUrl = new URL(invalidPage,baseUrl)
+	
+	scope.get(invalidUrl).reply(404)
+
+	await expect(pageLoader(invalidUrl, tempDir)).rejects.toThrow()
+})
+
+test('write project to system folders', async () => {
+	await expect(pageLoader(pageUrl.toString(), '/sys'))
+      .rejects.toThrow();
+})

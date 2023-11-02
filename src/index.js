@@ -4,15 +4,16 @@ import fs from "fs/promises";
 import path from "node:path";
 import * as cheerio from "cheerio";
 import debug from "debug";
+import Listr from "listr";
 
 import { urlToFilename, urlToDirname, processName } from "./utils/index.js";
 
 const log = debug("page-loader");
 
 const sourceAttrs = {
-	link: "href",
-	script: "link",
-	img: "src",
+	link: 'href',
+    script: 'src',
+    img: 'src',
 };
 
 export const pageLoader = (pageUrl, outputDir = "") => {
@@ -27,6 +28,35 @@ export const pageLoader = (pageUrl, outputDir = "") => {
 	const assetsDirname = urlToDirname(slug);
 	const assetsDirPath = path.join(pathToProjectDir, assetsDirname);
 
+	const prepareAsset = (tag, attrName) => {
+		const assetUrl = new URL(tag.attr(attrName), url.origin).toString();
+		const assetName = urlToFilename(tag.attr(attrName));
+		const fixAssetUrlToHtml = path.join(assetsDirname, [processName(url.hostname), assetName].join("-"));
+		const pathToAsset = path.join(pathToProjectDir, fixAssetUrlToHtml);
+
+		return axios
+			.get(assetUrl, { responseType: "arraybuffer" })
+			.then(({ data }) => {
+				log(`Try to write asset - ${assetName}`);
+				return fs
+					.writeFile(pathToAsset, data)
+					.then(() => {
+						cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
+					})
+					.catch((e) => {
+						console.error(`Cannot write file - ${pathToAsset}`);
+						console.error(e.message);
+						log(`Cannot write file - ${pathToAsset}`);
+					});
+			})
+			.catch(() => {
+				// console.error(`Error when downloading resource - ${pathToAsset}`);
+				// console.error("File will be empty");
+				cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
+				return fs.writeFile(pathToAsset, "");
+			});
+	};
+
 	let siteData;
 	let cheerioData;
 
@@ -35,14 +65,17 @@ export const pageLoader = (pageUrl, outputDir = "") => {
 		.then(({ data }) => {
 			siteData = data;
 
-			return fs.access(pathToProjectDir).catch(() => {
-				log(`create project directory - ${pathToProjectDir}`);
-
-				return fs.mkdir(pathToProjectDir);
-			});
+			return fs
+				.access(pathToProjectDir, fs.constants.R_OK | fs.constants.W_OK)
+				.then(() => fs.rm(pathToProjectDir, { recursive: true }))
+				.then(() => fs.mkdir(pathToProjectDir))
+				.catch(() => {
+					log(`create project directory - ${pathToProjectDir}`);
+					return fs.mkdir(pathToProjectDir);
+				});
 		})
 		.then(() => {
-			return fs.access(assetsDirPath).catch(() => {
+			return fs.access(assetsDirPath, fs.constants.R_OK | fs.constants.W_OK).catch(() => {
 				log(`create assets directory - ${assetsDirPath}`);
 
 				return fs.mkdir(assetsDirPath);
@@ -63,39 +96,15 @@ export const pageLoader = (pageUrl, outputDir = "") => {
 						return tagUrl.origin === url.origin;
 					})
 					.forEach((tag) => {
-						const assetUrl = new URL(tag.attr(attrName), url.origin).toString();
-
-						const promise = axios
-							.get(assetUrl, { responseType: "arraybuffer" })
-							.then(({ data }) => {
-								const assetName = urlToFilename(tag.attr(attrName));
-
-								const fixAssetUrlToHtml = path.join(assetsDirname, [processName(url.hostname), assetName].join("-"));
-								const pathToAsset = path.join(pathToProjectDir, fixAssetUrlToHtml);
-
-								log(`Try to write asset - ${assetName}`);
-
-								return fs
-									.writeFile(pathToAsset, data)
-									.then(() => {
-										cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
-									})
-									.catch((e) => {
-										console.log(e);
-									});
-							})
-							.catch((e) => {
-								return;
-							});
-
-						assetsPromises.push(promise);
+						const taskName = new URL(tag.attr(attrName), url.origin).toString();
+						assetsPromises.push({ title: taskName, task: () => prepareAsset(tag, attrName) });
 					});
 			});
-
-			return Promise.all(assetsPromises);
+			const listr = new Listr(assetsPromises, { concurrent: true });
+			return listr.run();
 		})
 		.then(() => {
 			log("Try to write main file");
 			return fs.writeFile(pathToMainFile, cheerioData.html());
-		});
+		})
 };
