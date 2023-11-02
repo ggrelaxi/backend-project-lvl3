@@ -66,7 +66,7 @@ const pageLoader = (pageUrl, outputDir = "") => {
 			siteData = data;
 
 			return fs
-				.access(pathToProjectDir, fs.constants.R_OK | fs.constants.W_OK)
+				.access(pathToProjectDir)
 				.then(() => fs.rm(pathToProjectDir, { recursive: true }))
 				.then(() => fs.mkdir(pathToProjectDir))
 				.catch(() => {
@@ -75,7 +75,7 @@ const pageLoader = (pageUrl, outputDir = "") => {
 				});
 		})
 		.then(() => {
-			return fs.access(assetsDirPath, fs.constants.R_OK | fs.constants.W_OK).catch(() => {
+			return fs.access(assetsDirPath).catch(() => {
 				log(`create assets directory - ${assetsDirPath}`);
 
 				return fs.mkdir(assetsDirPath);
