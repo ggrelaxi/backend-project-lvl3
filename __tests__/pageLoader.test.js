@@ -24,7 +24,6 @@ const baseUrl = "https://ru.hexlet.io";
 const pagePath = "/courses";
 const childPagePath = "/assets/runtime.js";
 const pageUrl = new URL(pagePath, baseUrl);
-const childPageUrl = new URL(childPagePath, baseUrl)
 
 let tempDir;
 let tempFilesDir;
@@ -73,7 +72,6 @@ beforeAll(async () => {
 
 	const assetsData = await Promise.all(assetsResponses)
 	assetsData.forEach(({ data, url }) => {
-		console.log(data, url)
 		scope.get(url).reply(200, data);
 	})
 })
