@@ -29,11 +29,14 @@ const pageLoader = (pageUrl, outputDir = "") => {
 	const assetsDirPath = path.join(pathToProjectDir, assetsDirname);
 
 	const prepareAsset = (tag, attrName) => {
-		const assetUrl = new URL(tag.attr(attrName), url.origin).toString();
-		const assetName = urlToFilename(tag.attr(attrName));
-		const fixAssetUrlToHtml = path.join(assetsDirname, [processName(url.hostname), assetName].join("-"));
+		const { hostname, pathname} = new URL(tag.attr(attrName), url.origin)
+		const assetUrl = `${hostname}${pathname}`
+		const assetName = urlToFilename(assetUrl);
+		const fixAssetUrlToHtml = path.join(assetsDirname, assetName);
 		const pathToAsset = path.join(pathToProjectDir, fixAssetUrlToHtml);
-		
+		// console.log('assetUrl:  ', assetUrl)
+		// console.log('assetName:  ', assetName)
+		// console.log('isUrlIncludesCurrentOrigin:  ', isUrlIncludesCurrentOrigin)
 		return axios
 			.get(assetUrl, { responseType: "arraybuffer" })
 			.then(({ data }) => {
