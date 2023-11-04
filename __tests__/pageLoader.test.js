@@ -72,8 +72,8 @@ beforeAll(async () => {
 	scope.get(childPagePath).reply(200, expectedGetChildPageReponse)
 
 	const assetsData = await Promise.all(assetsResponses)
-
 	assetsData.forEach(({ data, url }) => {
+		console.log(data, url)
 		scope.get(url).reply(200, data);
 	})
 })
@@ -96,7 +96,6 @@ test("check success download page", async () => {
 
 test('no response from download page', async () => {
 	await expect(fs.access(path.join(tempDir, expectedContentFilename))).rejects.toThrow()
-	
 	const invalidUrl = 'http://invalid.abv';
 	nock(invalidUrl).persist().get('/').replyWithError('');
 

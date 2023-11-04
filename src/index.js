@@ -29,20 +29,19 @@ const pageLoader = (pageUrl, outputDir = "") => {
 	const assetsDirPath = path.join(pathToProjectDir, assetsDirname);
 
 	const prepareAsset = (tag, attrName) => {
-		const { hostname, pathname} = new URL(tag.attr(attrName), url.origin)
+		const { hostname, pathname, protocol } = new URL(tag.attr(attrName), url.origin)
 		const assetUrl = `${hostname}${pathname}`
 		const assetName = urlToFilename(assetUrl);
 		const fixAssetUrlToHtml = path.join(assetsDirname, assetName);
 		const pathToAsset = path.join(pathToProjectDir, fixAssetUrlToHtml);
-		// console.log('assetUrl:  ', assetUrl)
-		// console.log('assetName:  ', assetName)
-		// console.log('isUrlIncludesCurrentOrigin:  ', isUrlIncludesCurrentOrigin)
+
 		return axios
-			.get(assetUrl, { responseType: "arraybuffer" })
+			.get(`${protocol}${assetUrl}`, { responseType: "arraybuffer" })
 			.then(({ data }) => {
 				log(`Try to write asset - ${assetName}`);
+
 				return fs
-					.writeFile(pathToAsset, data)
+					.writeFile(pathToAsset, data, {})
 					.then(() => {
 						cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
 					})
@@ -52,9 +51,9 @@ const pageLoader = (pageUrl, outputDir = "") => {
 						log(`Cannot write file - ${pathToAsset}`);
 					});
 			})
-			.catch(() => {
-				// console.error(`Error when downloading resource - ${pathToAsset}`);
-				// console.error("File will be empty");
+			.catch((e) => {
+				console.error(`Error when downloading resource - ${pathToAsset}`);
+				console.error("File will be empty");
 				cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
 				return fs.writeFile(pathToAsset, "");
 			});
