@@ -15,7 +15,7 @@
 		]
 	},
 	"bin": {
-		"page-loader": "./bin/pageloader.js"
+		"page-loader": "./bin/pageLoader.js"
 	},
 	"author": "ggrelaxi",
 	"license": "ISC",
