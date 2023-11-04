@@ -17,7 +17,7 @@ programm
 			})
 			.catch((e) => {
 				console.error(e.message)
-				process.exit(0)
+				process.exit(1)
 			})
 	});
 

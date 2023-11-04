@@ -19,7 +19,6 @@ const sourceAttrs = {
 const pageLoader = (pageUrl, outputDir = "") => {
 	log("url", pageUrl);
 	log("output directory", outputDir);
-
 	const url = new URL(pageUrl);
 	const slug = `${url.hostname}${url.pathname}`;
 	const mainFile = urlToFilename(slug);
@@ -66,7 +65,6 @@ const pageLoader = (pageUrl, outputDir = "") => {
 		.get(pageUrl)
 		.then(({ data }) => {
 			siteData = data;
-
 			return fs
 				.access(pathToProjectDir)
 				.then(() => fs.rm(pathToProjectDir, { recursive: true }))
