@@ -6,7 +6,7 @@ import * as cheerio from "cheerio";
 import debug from "debug";
 import Listr from "listr";
 
-import { urlToFilename, urlToDirname, processName } from "./utils/index.js";
+import { urlToFilename, urlToDirname } from "./utils/index.js";
 
 const log = debug("page-loader");
 
@@ -51,7 +51,7 @@ const pageLoader = (pageUrl, outputDir = "") => {
 						log(`Cannot write file - ${pathToAsset}`);
 					});
 			})
-			.catch((e) => {
+			.catch(() => {
 				console.error(`Error when downloading resource - ${pathToAsset}`);
 				console.error("File will be empty");
 				cheerioData(tag).attr(attrName, fixAssetUrlToHtml);

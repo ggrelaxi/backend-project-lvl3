@@ -4,7 +4,6 @@ import fs from "fs/promises";
 import os from "os";
 import nock from "nock";
 import pageLoader from "../src/index";
-import { read } from "node:fs";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,8 +15,6 @@ const destinationDirname = "page-loader-";
 const destinationFilesDirname = "ru-hexlet-io-courses_files";
 const expectedResponseFilename = "expectedResponse.html";
 const expectedChildPageResponseFilename = 'expectedResponseChildPage.html';
-const expectedChildPageDownloaded = 'expectedChildPage.html'
-const expectedChildPageContentFilename = 'ru-hexlet-io-courses.html';
 const expectedContentFilename = 'ru-hexlet-io-courses.html'
 const expectedContentDataFilename = 'expectedMainHtml.html'
 const baseUrl = "https://ru.hexlet.io";
@@ -86,10 +83,6 @@ test("check success download page", async () => {
 	const expectedContent = await readFile(expectedContentDataFilename);
 	const downloadedContent = await fs.readFile(path.join(tempDir, expectedContentFilename), 'utf-8')
 	expect(expectedContent).toEqual(downloadedContent);
-
-	// const expectedChildPageContent = await readFile(expectedChildPageDownloaded)
-	// const downloadedChildPage = await fs.readFile(path.join(tempDir, expectedChildPageContentFilename), 'utf-8')
-	// expect(expectedChildPageContent).toEqual(downloadedChildPage)
 });
 
 test('no response from download page', async () => {
