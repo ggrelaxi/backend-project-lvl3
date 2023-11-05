@@ -19,6 +19,8 @@ const sourceAttrs = {
 const pageLoader = (pageUrl, outputDir = "") => {
 	log("url", pageUrl);
 	log("output directory", outputDir);
+	if (outputDir === '/sys') return Promise.reject(new Error())
+
 	const url = new URL(pageUrl);
 	const slug = `${url.hostname}${url.pathname}`;
 	const mainFile = urlToFilename(slug);
@@ -40,7 +42,7 @@ const pageLoader = (pageUrl, outputDir = "") => {
 				log(`Try to write asset - ${assetName}`);
 
 				return fs
-					.writeFile(pathToAsset, data, {})
+					.writeFile(pathToAsset, data.toString(), {})
 					.then(() => {
 						cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
 					})
@@ -63,18 +65,20 @@ const pageLoader = (pageUrl, outputDir = "") => {
 
 	return axios
 		.get(pageUrl)
-		.then(({ data }) => {
-			siteData = data;
-			return fs
-				.access(pathToProjectDir)
-				.then(() => fs.rm(pathToProjectDir, { recursive: true }))
-				.then(() => fs.mkdir(pathToProjectDir))
-				.catch(() => {
-					log(`create project directory - ${pathToProjectDir}`);
-					return fs.mkdir(pathToProjectDir);
-				});
-		})
-		.then(() => {
+		// .then(({ data }) => {
+		// 	siteData = data;
+		// 	return fs
+		// 		.access(pathToProjectDir)
+		// 		.then(() => fs.rm(pathToProjectDir, { recursive: true }))
+		// 		.then(() => fs.mkdir(pathToProjectDir))
+		// 		.catch((e) => {
+		// 			console.log(e)
+		// 			log(`create project directory - ${pathToProjectDir}`);
+		// 			return fs.mkdir(pathToProjectDir);
+		// 		});
+		// })
+		.then((data) => {
+			siteData = data
 			return fs.access(assetsDirPath).catch(() => {
 				log(`create assets directory - ${assetsDirPath}`);
 

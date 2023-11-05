@@ -13,7 +13,7 @@ programm
 	.action((url, options) => {
 		return pageLoader(url, options.output)
 			.then(() => {
-				console.log(`Page was successfully downloaded, to directory - ${options.output}`)
+				console.log(`Page was successfully downloaded, to directory - ${options.output || process.cwd()}`)
 			})
 			.catch((e) => {
 				console.error(e.message)
