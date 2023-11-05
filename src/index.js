@@ -28,14 +28,14 @@ const pageLoader = (pageUrl, outputDir = "") => {
 	const assetsDirPath = path.join(pathToProjectDir, assetsDirname);
 
 	const prepareAsset = (tag, attrName) => {
-		const { hostname, pathname, protocol } = new URL(tag.attr(attrName), url.origin)
+		const { hostname, pathname, origin } = new URL(tag.attr(attrName), url.origin)
 		const assetUrl = `${hostname}${pathname}`
 		const assetName = urlToFilename(assetUrl);
 		const fixAssetUrlToHtml = path.join(assetsDirname, assetName);
 		const pathToAsset = path.join(pathToProjectDir, fixAssetUrlToHtml);
 
 		return axios
-			.get(`${protocol}${assetUrl}`, { responseType: "arraybuffer" })
+			.get(`${origin}${pathname}`, { responseType: "arraybuffer" })
 			.then(({ data }) => {
 				log(`Try to write asset - ${assetName}`);
 
@@ -52,9 +52,6 @@ const pageLoader = (pageUrl, outputDir = "") => {
 			})
 			.catch(() => {
 				console.error(`Error when downloading resource - ${pathToAsset}`);
-				console.error("File will be empty");
-				cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
-				return fs.writeFile(pathToAsset, "");
 			});
 	};
 
