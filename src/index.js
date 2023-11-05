@@ -20,7 +20,6 @@ const pageLoader = (pageUrl, outputDir = "") => {
 	log("url", pageUrl);
 	log("output directory", outputDir);
 	if (outputDir === '/sys') return Promise.reject(new Error())
-
 	const url = new URL(pageUrl);
 	const slug = `${url.hostname}${url.pathname}`;
 	const mainFile = urlToFilename(slug);
@@ -65,32 +64,19 @@ const pageLoader = (pageUrl, outputDir = "") => {
 
 	return axios
 		.get(pageUrl)
-		// .then(({ data }) => {
-		// 	siteData = data;
-		// 	return fs
-		// 		.access(pathToProjectDir)
-		// 		.then(() => fs.rm(pathToProjectDir, { recursive: true }))
-		// 		.then(() => fs.mkdir(pathToProjectDir))
-		// 		.catch((e) => {
-		// 			console.log(e)
-		// 			log(`create project directory - ${pathToProjectDir}`);
-		// 			return fs.mkdir(pathToProjectDir);
-		// 		});
-		// })
-		.then((data) => {
+		.then(({ data }) => {
 			siteData = data
 			return fs.access(assetsDirPath).catch(() => {
 				log(`create assets directory - ${assetsDirPath}`);
-
-				return fs.mkdir(assetsDirPath);
+				return fs.mkdir(assetsDirPath)
 			});
 		})
 		.then(() => {
 			cheerioData = cheerio.load(siteData);
 			const assetsPromises = [];
-
 			Object.entries(sourceAttrs).forEach(([tagName, attrName]) => {
 				const tags = cheerioData(tagName).toArray();
+				console.log(tags)
 				tags
 					.map((tag) => cheerioData(tag))
 					.filter((tag) => tag.attr(attrName) !== undefined)

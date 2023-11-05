@@ -75,7 +75,6 @@ beforeAll(async () => {
 
 test("check success download page", async () => {
 	await pageLoader(pageUrl, tempDir)
-
 	assets.forEach(async ({ destinationFilename }) => {
 		await expect(fs.access(path.join(tempFilesDir, destinationFilename))).resolves.not.toThrow();
 	})
