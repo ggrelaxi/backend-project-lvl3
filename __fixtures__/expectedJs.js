@@ -1,1 +1,1 @@
-console.log('hello from page-downloader')
+console.log('hello from page-downloader');

@@ -1,22 +1,21 @@
-import path from "node:path";
+import path from 'node:path';
 
-export const processName = (name, replacer = "-") =>
-	name
-		.match(/\w*/gi)
-		.filter((x) => x)
-		.join(replacer);
+export const processName = (name, replacer = '-') => name
+  .match(/\w*/gi)
+  .filter((x) => x)
+  .join(replacer);
 
-export const urlToFilename = (link, defaultFormat = ".html") => {
-	const { dir, name, ext } = path.parse(link);
-	const slug = processName(path.join(dir, name));
-	const format = ext || defaultFormat;
+export const urlToFilename = (link, defaultFormat = '.html') => {
+  const { dir, name, ext } = path.parse(link);
+  const slug = processName(path.join(dir, name));
+  const format = ext || defaultFormat;
 
-	return `${slug}${format}`;
+  return `${slug}${format}`;
 };
 
-export const urlToDirname = (link, postfix = "_files") => {
-	const { dir, name, ext } = path.parse(link);
-	const slug = processName(path.join(dir, name, ext));
+export const urlToDirname = (link, postfix = '_files') => {
+  const { dir, name, ext } = path.parse(link);
+  const slug = processName(path.join(dir, name, ext));
 
-	return `${slug}${postfix}`;
+  return `${slug}${postfix}`;
 };
