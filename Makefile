@@ -1,5 +1,5 @@
 install:
-	npm install
+	npm install --force
 lint:
 	npx eslint .
 link:
