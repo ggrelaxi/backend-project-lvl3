@@ -19,7 +19,6 @@ const sourceAttrs = {
 const pageLoader = (pageUrl, outputDir = "") => {
 	log("url", pageUrl);
 	log("output directory", outputDir);
-	if (outputDir === '/sys') return Promise.reject(new Error())
 	const url = new URL(pageUrl);
 	const slug = `${url.hostname}${url.pathname}`;
 	const mainFile = urlToFilename(slug);
@@ -41,7 +40,7 @@ const pageLoader = (pageUrl, outputDir = "") => {
 				log(`Try to write asset - ${assetName}`);
 
 				return fs
-					.writeFile(pathToAsset, data.toString(), {})
+					.writeFile(pathToAsset, data, {})
 					.then(() => {
 						cheerioData(tag).attr(attrName, fixAssetUrlToHtml);
 					})
@@ -76,7 +75,6 @@ const pageLoader = (pageUrl, outputDir = "") => {
 			const assetsPromises = [];
 			Object.entries(sourceAttrs).forEach(([tagName, attrName]) => {
 				const tags = cheerioData(tagName).toArray();
-				console.log(tags)
 				tags
 					.map((tag) => cheerioData(tag))
 					.filter((tag) => tag.attr(attrName) !== undefined)
