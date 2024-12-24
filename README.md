@@ -22,18 +22,10 @@ $ npm install
 $ npm link
 ```
 
-
 ## For download webpage, enter url and destination folder
 ```sh
 $ page-loader <webpack_url> --output <destination_dirname>
 ```
-[![asciicast](https://asciinema.org/a/dmVd4izLnalwneRKs8mz8jFmJ.png)](https://asciinema.org/a/dmVd4izLnalwneRKs8mz8jFmJ)
-
-## Invalid url or another problem
-```sh
-$ page-loader <webpack_url> --output <destination_dirname>
-```
-[![asciicast](https://asciinema.org/a/618530.png)](https://asciinema.org/a/618530)
-
+[![asciicast](https://asciinema.org/a/696001.png)](https://asciinema.org/a/696001)
 
 
