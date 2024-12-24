@@ -11,12 +11,14 @@ programm
   .option('-o, --output [dir]', 'directory for saving files')
   .argument('<url>')
   .action((url, options) =>
-    pageLoader(url, options.output).then((filepath) => {
+    pageLoader(url, options.output)
+      .then((filepath) => {
         console.log(`Page was successfully downloaded, into - ${filepath}`);
       })
       .catch((e) => {
         console.error(e.message);
         process.exit(1);
-      }));
+      })
+  );
 
 programm.parse(process.argv);
