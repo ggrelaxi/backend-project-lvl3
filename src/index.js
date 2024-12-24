@@ -72,8 +72,7 @@ const pageLoader = (pageUrl, outputDir = '') => {
       const assetsPromises = [];
       Object.entries(sourceAttrs).forEach(([tagName, attrName]) => {
         const tags = cheerioData(tagName).toArray();
-        tags
-          .map((tag) => cheerioData(tag))
+        tags.map((tag) => cheerioData(tag))
           .filter((tag) => tag.attr(attrName) !== undefined)
           .filter((tag) => {
             const linkAttr = tag.attr(attrName);
@@ -91,7 +90,8 @@ const pageLoader = (pageUrl, outputDir = '') => {
     .then(() => {
       log('Try to write main file');
       return fs.writeFile(pathToMainFile, cheerioData.html());
-    }).then(() => pathToMainFile)
+    })
+    .then(() => pathToMainFile);
 };
 
 export default pageLoader;
