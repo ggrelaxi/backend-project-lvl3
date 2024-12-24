@@ -84,6 +84,7 @@ test('check success download page', async () => {
 
   const expectedContent = await readFile(expectedContentDataFilename);
   const downloadedContent = await fs.readFile(path.join(tempDir, expectedContentFilename), 'utf-8');
+
   expect(expectedContent).toEqual(downloadedContent);
 });
 

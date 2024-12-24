@@ -37,9 +37,9 @@ const prepareAssets = (html, origin, assetsDir) => {
   return { html: cheerioData.html(), assets };
 };
 
-const downloadAsset = (dirname, asset) => {
+const downloadAsset = async (dirname, asset) => {
   const { url, filename } = asset;
-  axios.get(url.toString(), { responseType: 'arraybuffer' }).then((response) => {
+  return axios.get(url.toString(), { responseType: 'arraybuffer' }).then((response) => {
     const assetPath = path.join(dirname, filename);
     return fs.writeFile(assetPath, response.data);
   });
