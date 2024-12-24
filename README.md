@@ -22,7 +22,6 @@ $ npm install
 $ npm link
 ```
 
-https://asciinema.org/a/696001
 ## For download webpage, enter url and destination folder
 ```sh
 $ page-loader <webpack_url> --output <destination_dirname>
