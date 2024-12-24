@@ -1,9 +1,8 @@
 import path from 'node:path';
 
-export const processName = (name, replacer = '-') =>
-  name.match(/\w*/gi)
-    .filter((x) => x)
-    .join(replacer);
+export const processName = (name, replacer = '-') => name.match(/\w*/gi)
+  .filter((x) => x)
+  .join(replacer);
 
 export const urlToFilename = (link, defaultFormat = '.html') => {
   const { dir, name, ext } = path.parse(link);
