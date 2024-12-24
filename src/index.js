@@ -45,7 +45,7 @@ const downloadAsset = (dirname, asset) => {
 	});
 };
 
-const pageLoader = (pageUrl, outputDir = '') => {
+const pageLoader = (pageUrl, outputDir = process.cwd()) => {
 	log('url', pageUrl);
 	log('output directory', outputDir);
 	const url = new URL(pageUrl);
