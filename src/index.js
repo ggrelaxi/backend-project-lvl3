@@ -91,7 +91,7 @@ const pageLoader = (pageUrl, outputDir = '') => {
     .then(() => {
       log('Try to write main file');
       return fs.writeFile(pathToMainFile, cheerioData.html());
-    });
+    }).then(() => pathToMainFile)
 };
 
 export default pageLoader;
