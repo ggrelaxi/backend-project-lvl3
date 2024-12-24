@@ -1,8 +1,7 @@
 import path from 'node:path';
 
 export const processName = (name, replacer = '-') =>
-  name
-    .match(/\w*/gi)
+  name.match(/\w*/gi)
     .filter((x) => x)
     .join(replacer);
 
