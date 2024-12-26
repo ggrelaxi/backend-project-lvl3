@@ -8,7 +8,7 @@ import {
   beforeEach,
   test,
   expect
-} from 'jest';
+} from '@jest/globals';
 import pageLoader from '../src/index';
 
 const __filename = url.fileURLToPath(import.meta.url);
