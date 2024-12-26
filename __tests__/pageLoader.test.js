@@ -3,7 +3,7 @@ import url from 'node:url';
 import fs from 'fs/promises';
 import os from 'os';
 import nock from 'nock';
-import { 
+import {
   beforeAll,
   beforeEach,
   test,
