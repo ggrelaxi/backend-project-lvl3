@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import pageLoader from '../src/index.js';
+import process from 'node:process';
 
 const programm = new Command();
 
@@ -18,6 +19,6 @@ programm
       .catch((e) => {
         console.error(e.message);
         process.exit(1);
-      })
     });
+  });
 programm.parse(process.argv);
