@@ -7,7 +7,7 @@ import {
   beforeAll,
   beforeEach,
   test,
-  expect
+  expect,
 } from '@jest/globals';
 import pageLoader from '../src/index';
 
